@@ -58,7 +58,6 @@ RUN apt-key fingerprint 0EBFCD88
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 RUN apt-get update
 RUN apt-get -y install docker-ce
-ENV DOCKER_HOST tcp://10.141.0.75:4243
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 RUN chmod 777 /usr/local/bin/jenkins-slave
