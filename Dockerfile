@@ -40,25 +40,12 @@ RUN apt-get clean && apt-get update \
   && apt-get install -y --no-install-recommends unzip git libc6 libc6-dev libc6-dbg libgit2-24 \
   && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# Install GitVersion
-RUN apt-get update && apt-get install -y unzip mono-runtime libmono-system-core4.0-cil libgit2-24 && \
-    curl -L -o /tmp/GitVersion_4.0.0-beta0012.zip https://github.com/GitTools/GitVersion/releases/download/v4.0.0-beta.12/GitVersion_4.0.0-beta0012.zip && \
-    unzip -d /opt/GitVersion /tmp/GitVersion_4.0.0-beta0012.zip && \
-    rm /tmp/GitVersion_4.0.0-beta0012.zip && \
-    echo '<configuration><dllmap os="linux" cpu="x86-64" wordsize="64" dll="git2-baa87df" target="/usr/lib/x86_64-linux-gnu/libgit2.so.24" /></configuration>' > \
-    /opt/GitVersion/LibGit2Sharp.dll.config
-
-RUN echo '#!/bin/bash\nexec mono /opt/GitVersion/GitVersion.exe "$@"' > /usr/bin/git-version
-RUN chmod +x /usr/bin/git-version
-
-
 #Install Docker
 RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 RUN apt-key fingerprint 0EBFCD88
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
 RUN apt-get update
 RUN apt-get -y install docker-ce
-RUN dotnet tool install -g GitVersion.Tool
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 RUN chmod 777 /usr/local/bin/jenkins-slave
